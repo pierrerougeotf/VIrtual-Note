@@ -17,7 +17,7 @@ struct ImmersiveView: View {
     @State private var arkitSession = ARKitSession()
     @State private var fadeCompleteSubscriptions: Set<AnyCancellable> = []
     @State private var entity: Entity?
-    @State private var first = true
+    @State private var showMainContentView = false
 
     var body: some View {
         RealityView { content, attachments in
@@ -40,17 +40,22 @@ struct ImmersiveView: View {
             }
         } attachments: {
             Attachment(id: "barcode") {
-                MainContentView()
-                    .padding()
-                    .glassBackgroundEffect()
-                    .frame(width: 450, height: 1000)
-//                button("Open") {
-//                    
-//                }
-//                Text("Glass Cube")
-//                    .font(.extraLargeTitle)
-//                    .padding()
-//                    .glassBackgroundEffect()
+                VStack {
+                    Spacer()
+                    if showMainContentView {
+                        MainContentView()
+                            .padding()
+                            .glassBackgroundEffect()
+                    }
+                    Button(showMainContentView ? "Close" : "Open") {
+                        showMainContentView.toggle()
+                    }
+//                    Text("Glass Cube")
+//                        .font(.extraLargeTitle)
+//                        .padding()
+//                        .glassBackgroundEffect()
+                }
+                .frame(width: 450, height: 1000)
             }
 
         }
