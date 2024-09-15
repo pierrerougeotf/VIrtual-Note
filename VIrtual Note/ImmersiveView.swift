@@ -13,6 +13,9 @@ import Combine
 
 struct ImmersiveView: View {
     @Environment(AppModel.self) var appModel
+    @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismissWindow) private var dismissWindow
+
     @State private var root = Entity()
     @State private var arkitSession = ARKitSession()
     @State private var fadeCompleteSubscriptions: Set<AnyCancellable> = []
@@ -35,27 +38,31 @@ struct ImmersiveView: View {
                         )
                     )
                 )
-                attachment.position = [0.0, 0.0, -0.5]
+                attachment.position = [0.0, 0.0, -0.05]
                 entity?.addChild(attachment)
             }
         } attachments: {
             Attachment(id: "barcode") {
-                VStack {
-                    Spacer()
-                    if showMainContentView {
-                        MainContentView()
-                            .padding()
-                            .glassBackgroundEffect()
-                    }
+//                VStack {
+//                    Spacer()
+//                    if showMainContentView {
+//                        MainContentView()
+//                            .padding()
+//                            .glassBackgroundEffect()
+//                    }
                     Button(showMainContentView ? "Close" : "Open") {
+                        if showMainContentView {
+                            dismissWindow(id: "mainContent")
+                        } else {
+                            openWindow(id: "mainContent")
+                        }
                         showMainContentView.toggle()
                     }
 //                    Text("Glass Cube")
 //                        .font(.extraLargeTitle)
 //                        .padding()
 //                        .glassBackgroundEffect()
-                }
-                .frame(width: 450, height: 1000)
+//                }
             }
 
         }

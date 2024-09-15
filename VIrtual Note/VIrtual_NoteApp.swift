@@ -18,6 +18,7 @@ struct VIrtual_NoteApp: App {
             ContentView()
                 .environment(appModel)
         }
+        .defaultSize(CGSize(width: 80, height: 30))
 
         WindowGroup(id: "text-editor") {
             TextEditingView()
@@ -29,6 +30,12 @@ struct VIrtual_NoteApp: App {
                     avPlayerViewModel.play(.step1)
                 }
         }
+
+        WindowGroup("Main Content", id: "mainContent") {
+            MainContentView()
+                .padding()
+        }
+        .defaultSize(CGSize(width: 450, height: 850))
 
         ImmersiveSpace(id: appModel.immersiveSpaceID) {
             ImmersiveView()

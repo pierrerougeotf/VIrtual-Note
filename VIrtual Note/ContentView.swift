@@ -15,12 +15,9 @@ struct ContentView: View {
     var body: some View {
         VStack {
             ToggleImmersiveSpaceButton()
-            Button("Open New Window") {
-                openWindow(id: "text-editor")
-            }
-            Button("Open player") {
-                openWindow(id: "tutorial")
-            }
+//            Button("Open player") {
+//                openWindow(id: "tutorial")
+//            }
         }
     }
 }

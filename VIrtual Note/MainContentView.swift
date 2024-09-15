@@ -12,7 +12,8 @@ import RealityKitContent
 struct MainContentView: View {
 
     @State private var textNote: String = "Enter your note here"
-    
+    @Environment(\.openWindow) private var openWindow
+
     var body: some View {
         ScrollView {
             
@@ -112,7 +113,7 @@ struct MainContentView: View {
                         }
                         .padding()
                         Button(action: {
-                            // Your code here
+                            openWindow(id: "tutorial")
                         }) {
                             Text("Start")
                                 .frame(width: 200, height: 40)
