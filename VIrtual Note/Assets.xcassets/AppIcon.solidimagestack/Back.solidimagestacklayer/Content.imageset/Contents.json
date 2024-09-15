@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "0-background.png",
       "idiom" : "vision",
       "scale" : "2x"
     }
