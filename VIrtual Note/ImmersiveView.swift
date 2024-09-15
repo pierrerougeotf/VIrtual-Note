@@ -16,13 +16,36 @@ struct ImmersiveView: View {
     @State private var root = Entity()
     @State private var arkitSession = ARKitSession()
     @State private var fadeCompleteSubscriptions: Set<AnyCancellable> = []
+    @State private var entity: Entity?
+    @State private var first = true
 
     var body: some View {
-        RealityView { content in
-            // Add the initial RealityKit content
-            //            if let immersiveContentEntity = try? await Entity(named: "Immersive", in: realityKitContentBundle) {
+        RealityView { content, attachments in
             content.add(root)
-            //            }
+        } update: { _,
+            attachments in
+            if let attachment = attachments.entity(for: "barcode") {
+                attachment.transform.rotation = simd_quatf(
+                    Rotation3D(
+                        eulerAngles: EulerAngles(
+                            x: Angle2D(degrees: -90.0),
+                            y: .zero,
+                            z: .zero,
+                            order: .xyz
+                        )
+                    )
+                )
+                attachment.position = [0.0, 0.0, -0.2]
+                entity?.addChild(attachment)
+            }
+        } attachments: {
+            Attachment(id: "barcode") {
+                Text("Glass Cube")
+                    .font(.extraLargeTitle)
+                    .padding()
+                    .glassBackgroundEffect()
+            }
+
         }
         .task {
             // Check if barcode detection is supported; otherwise handle this case.
@@ -30,9 +53,9 @@ struct ImmersiveView: View {
 
             // Spatial barcode & QR code scanning example
 
-            await arkitSession.queryAuthorization(for: [.worldSensing])
+            await _ = arkitSession.queryAuthorization(for: [.worldSensing])
 
-            let barcodeDetection = BarcodeDetectionProvider(symbologies: [.code39, .qr, .upce])
+            let barcodeDetection = BarcodeDetectionProvider(symbologies: [.code39, .qr, .upce, .ean8, .ean13])
 
             do {
                 try await arkitSession.run([barcodeDetection])
@@ -44,15 +67,14 @@ struct ImmersiveView: View {
                 switch anchorUpdate.event {
                 case .added:
                     // Call our app method to add a box around a new barcode
-                    playAnimation(for: anchorUpdate.anchor)
+                    update(anchorUpdate.anchor)
 //                    if let payloadString = anchorUpdate.anchor.payloadString {
 //                        let string = "shortcuts://run-shortcut?name=VisionNote&input=text&text=\(payloadString)"
 //                        await UIApplication.shared.open(URL(string: string)!)
 //                    }
                 case .updated:
                     // Call our app method to move a barcode's box
-                    //                        playAnimation(for: anchorUpdate.anchor)
-                    break
+                    update(anchorUpdate.anchor)
                 case .removed:
                     // Call our app method to remove a barcode's box
                     //                        playAnimation(for: anchorUpdate.anchor)
@@ -62,46 +84,20 @@ struct ImmersiveView: View {
         }
     }
 
-    func playAnimation(for anchor: BarcodeAnchor) {
-        guard let scene = root.scene else { return }
-
+    func update(_ anchor: BarcodeAnchor) {
         // Create a plane sized to match the barcode.
         let extent = anchor.extent
-        let entity = ModelEntity(mesh: .generatePlane(width: extent.x, depth: extent.z), materials: [UnlitMaterial(color: .green)])
+        let entity = self.entity
+        ?? ModelEntity(mesh: .generatePlane(width: extent.x, depth: extent.z), materials: [UnlitMaterial(color: .green)])
         entity.components.set(OpacityComponent(opacity: 0.5))
 
         // Position the plane over the barcode.
         entity.transform = Transform(matrix: anchor.originFromAnchorTransform)
-        root.addChild(entity)
 
-        // Fade the plane in and out.
-//        do {
-//            let duration = 0.5
-//            let fadeIn = try AnimationResource.generate(with: FromToByAnimation<Float>(
-//                from: 0,
-//                to: 1.0,
-//                duration: duration,
-//                isAdditive: true,
-//                bindTarget: .opacity)
-//            )
-//            let fadeOut = try AnimationResource.generate(with: FromToByAnimation<Float>(
-//                from: 1.0,
-//                to: 0,
-//                duration: duration,
-//                isAdditive: true,
-//                bindTarget: .opacity))
-//
-//            let fadeAnimation = try AnimationResource.sequence(with: [fadeIn, fadeOut])
-//
-//            _ = scene.subscribe(to: AnimationEvents.PlaybackCompleted.self, on: entity, { _ in
-//                // Remove the plane after the animation completes.
-//                entity.removeFromParent()
-//            }).store(in: &fadeCompleteSubscriptions)
-//
-//            entity.playAnimation(fadeAnimation)
-//        } catch {
-//            // Handle the error.
-//        }
+        if self.entity == nil {
+            self.entity = entity
+            root.addChild(entity)
+        }
     }
 }
 
