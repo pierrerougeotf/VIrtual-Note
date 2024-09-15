@@ -10,9 +10,14 @@ import RealityKit
 
 struct ContentView: View {
 
+    @Environment(\.openWindow) private var openWindow
+
     var body: some View {
         VStack {
             ToggleImmersiveSpaceButton()
+            Button("Open New Window") {
+                openWindow(id: "text-editor")
+            }
         }
     }
 }
