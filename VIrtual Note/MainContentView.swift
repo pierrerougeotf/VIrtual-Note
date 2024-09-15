@@ -13,16 +13,19 @@ struct MainContentView: View {
 
     @State private var textNote: String = "Enter your note here"
     @Environment(\.openWindow) private var openWindow
+    @Environment(\.dismissWindow) private var dismissWindow
+    @State private var videoStep: AVPlayerViewModel.Video?
+    @Binding var avPlayerViewModel: AVPlayerViewModel
 
     var body: some View {
         ScrollView {
-            
+
             Text("Orange Juice")
                 .font(.largeTitle)
                 .padding(.all, 40)
-            
+
             VStack{
-                                
+
                 VStack(alignment: .leading) {
                     HStack{
                         Image(systemName: "info.circle")
@@ -35,7 +38,7 @@ struct MainContentView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 10)
-                
+
                 VStack(alignment: .leading) {
                     HStack{
                         Image(systemName: "plus.circle")
@@ -53,9 +56,7 @@ struct MainContentView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 10)
-                
-                
-                
+
                 VStack(alignment: .leading) {
                     HStack{
                         Image(systemName: "leaf.arrow.triangle.circlepath")
@@ -63,7 +64,7 @@ struct MainContentView: View {
                             .font(.title2)
                             .padding(.vertical, 10)
                     }
-     
+
                     VStack(alignment: .center) {
                         Text("Green idea n°1")
                             .font(.title3)
@@ -78,7 +79,7 @@ struct MainContentView: View {
 //                                .aspectRatio(contentMode: .fit)
 //                                .frame(width: 100)
                             Spacer()
-                            
+
                             Model3D(named: "OrangeJuiceModel.usdz", bundle: realityKitContentBundle) { model in
                                 model
                                     .resizable()
@@ -91,7 +92,7 @@ struct MainContentView: View {
                             .background(.regularMaterial)
                             .hoverEffect()
                             .cornerRadius(20)
-                            
+
                             Image(systemName: "arrow.forward")
 
                             Model3D(named: "BirdFeederModel.usdz", bundle: realityKitContentBundle) { model in
@@ -106,19 +107,33 @@ struct MainContentView: View {
                             .background(.regularMaterial)
                             .hoverEffect()
                             .cornerRadius(20)
-                            
 
-                            
+
+
                             Spacer()
                         }
                         .padding()
-                        Button(action: {
-                            openWindow(id: "tutorial")
-                        }) {
-                            Text("Start")
-                                .frame(width: 200, height: 40)
+                        HStack {
+//                            if videoStep?.previous != nil {
+                                Button("Previous") {
+                                    videoStep = videoStep?.previous
+                                    avPlayerViewModel.play(videoStep)
+                                    if videoStep == nil { dismissWindow(id: "tutorial") }
+                                }
+                                Spacer()
+//                            }
+
+                            Button(/* videoStep == nil ? "Start" :*/ "Next") {
+                                if videoStep == nil { openWindow(id: "tutorial") }
+                                videoStep = nextVideo
+                                avPlayerViewModel.play(videoStep)
+                                if videoStep == nil { dismissWindow(id: "tutorial") }
+                            }
+//                        Button(action: {
+//                        }) {
+//                            Text("Start")
+//                                .frame(width: 200, height: 40)
                         }
-                        
                     }
                     .padding(.all, 5)
 //                    .overlay {
@@ -132,7 +147,18 @@ struct MainContentView: View {
             }
             .padding()
         }
+        .onChange(of: videoStep) {
+        }
     }
+
+
+    private var nextVideo: AVPlayerViewModel.Video? {
+        videoStep == nil ? .step1 : videoStep?.next
+    }
+//
+//    private var previousVideo: AVPlayerViewModel.Video? {
+//        videoStep?.previous
+//    }
 }
 
 #Preview(windowStyle: .automatic) {

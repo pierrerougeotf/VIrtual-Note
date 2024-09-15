@@ -26,16 +26,20 @@ struct VIrtual_NoteApp: App {
 
         WindowGroup("tutorial", id: "tutorial") {
             AVPlayerView(viewModel: avPlayerViewModel)
-                .onAppear() {
-                    avPlayerViewModel.play(.step1)
-                }
+//                .onAppear() {
+//                    avPlayerViewModel.play(.step1)
+//                }
+//                .onDisappear {
+//                    avPlayerViewModel.play()
+//                }
+
         }
 
         WindowGroup("Main Content", id: "mainContent") {
-            MainContentView()
+            MainContentView(avPlayerViewModel: $avPlayerViewModel)
                 .padding()
         }
-        .defaultSize(CGSize(width: 450, height: 850))
+        .defaultSize(CGSize(width: 450, height: 1000))
 
         ImmersiveSpace(id: appModel.immersiveSpaceID) {
             ImmersiveView()

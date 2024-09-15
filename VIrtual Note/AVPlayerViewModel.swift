@@ -15,6 +15,28 @@ class AVPlayerViewModel: NSObject {
         case step1 = "step1"
         case step2 = "step2"
         case step3 = "step3"
+
+        var next: Self? {
+            switch self {
+            case .step1:
+                return .step1
+            case .step2:
+                return .step3
+            case .step3:
+                return nil
+            }
+        }
+
+        var previous: Self? {
+            switch self {
+            case .step1:
+                return nil
+            case .step2:
+                return .step1
+            case .step3:
+                return .step2
+            }
+        }
     }
 
     var isPlaying: Bool = false
@@ -29,8 +51,12 @@ class AVPlayerViewModel: NSObject {
         return avPlayerViewController
     }
 
-    func play(_ video: Video) {
-        guard let videoURL = URL(string:"http://pierre.rougeot.free.fr/VisionNote/\(video.rawValue).mov") else { return }
+    func play(_ video: Video? = nil) {
+        guard
+            let video,
+            let videoURL = URL(string:"http://pierre.rougeot.free.fr/VisionNote/\(video.rawValue).mov") else {
+            reset()
+        return }
 
         let item = AVPlayerItem(url: videoURL)
         avPlayer.replaceCurrentItem(with: item)
