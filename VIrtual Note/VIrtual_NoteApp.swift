@@ -6,17 +6,27 @@
 //
 
 import SwiftUI
+import ARKit
 
 @main
 struct VIrtual_NoteApp: App {
 
     @State private var appModel = AppModel()
     @State private var avPlayerViewModel = AVPlayerViewModel()
-
+    @State private var showObjectTracking = true
+    @State private var appState = AppState()
+    
+    @State private var arkitSession = ARKitSession()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(appModel)
+                .task {
+                    if appState.allRequiredProvidersAreSupported {
+                        await appState.referenceObjectLoader.loadBuiltInReferenceObjects()
+                    }
+                }
         }
         .defaultSize(CGSize(width: 80, height: 30))
 
@@ -36,13 +46,17 @@ struct VIrtual_NoteApp: App {
         }
 
         WindowGroup("Main Content", id: "mainContent") {
-            MainContentView(avPlayerViewModel: $avPlayerViewModel)
+            MainContentView(avPlayerViewModel: $avPlayerViewModel, showObjectTracking: $showObjectTracking)
                 .padding()
         }
         .defaultSize(CGSize(width: 450, height: 1000))
+        
 
         ImmersiveSpace(id: appModel.immersiveSpaceID) {
-            ImmersiveView()
+            if showObjectTracking {
+                ObjectTrackingRealityView(appState: appState, arkitSession: $arkitSession)
+            }
+            ImmersiveView(arkitSession: $arkitSession)
                 .environment(appModel)
                 .onAppear {
                     appModel.immersiveSpaceState = .open

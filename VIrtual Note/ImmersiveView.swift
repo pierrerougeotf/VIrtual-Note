@@ -17,7 +17,7 @@ struct ImmersiveView: View {
     @Environment(\.dismissWindow) private var dismissWindow
 
     @State private var root = Entity()
-    @State private var arkitSession = ARKitSession()
+    @Binding var arkitSession : ARKitSession
     @State private var fadeCompleteSubscriptions: Set<AnyCancellable> = []
     @State private var entity: Entity?
     @State private var showMainContentView = false
@@ -120,7 +120,4 @@ struct ImmersiveView: View {
     }
 }
 
-#Preview(immersionStyle: .progressive) {
-    ImmersiveView()
-        .environment(AppModel())
-}
+

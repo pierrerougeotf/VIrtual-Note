@@ -16,6 +16,7 @@ struct MainContentView: View {
     @Environment(\.dismissWindow) private var dismissWindow
     @State private var videoStep: AVPlayerViewModel.Video?
     @Binding var avPlayerViewModel: AVPlayerViewModel
+    @Binding var showObjectTracking: Bool
 
     var body: some View {
         ScrollView {
@@ -127,7 +128,10 @@ struct MainContentView: View {
                                 if videoStep == nil { openWindow(id: "tutorial") }
                                 videoStep = nextVideo
                                 avPlayerViewModel.play(videoStep)
+                                showObjectTracking = true
                                 if videoStep == nil { dismissWindow(id: "tutorial") }
+                                showObjectTracking = true
+
                             }
 //                        Button(action: {
 //                        }) {

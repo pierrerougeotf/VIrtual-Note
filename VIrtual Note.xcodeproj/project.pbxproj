@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		17398F792C973CF000279E24 /* OrangeJuiceReference-face.referenceobject in Sources */ = {isa = PBXBuildFile; fileRef = 17398F782C973CF000279E24 /* OrangeJuiceReference-face.referenceobject */; };
 		4959A6B72C9614C200A6C1A4 /* RealityKitContent in Frameworks */ = {isa = PBXBuildFile; productRef = 4959A6B62C9614C200A6C1A4 /* RealityKitContent */; };
 		4959A6E12C9631FD00A6C1A4 /* Enterprise.license in Resources */ = {isa = PBXBuildFile; fileRef = 4959A6E02C9631FD00A6C1A4 /* Enterprise.license */; };
 /* End PBXBuildFile section */
@@ -22,6 +23,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		17398F782C973CF000279E24 /* OrangeJuiceReference-face.referenceobject */ = {isa = PBXFileReference; lastKnownFileType = file.referenceobject; path = "OrangeJuiceReference-face.referenceobject"; sourceTree = "<group>"; };
 		4959A6B12C9614C200A6C1A4 /* VIrtual Note.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "VIrtual Note.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4959A6B52C9614C200A6C1A4 /* RealityKitContent */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RealityKitContent; sourceTree = "<group>"; };
 		4959A6D02C9614C900A6C1A4 /* VIrtual NoteTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "VIrtual NoteTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,9 +75,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		17398F732C972C6100279E24 /* Reference Objects */ = {
+			isa = PBXGroup;
+			children = (
+				17398F782C973CF000279E24 /* OrangeJuiceReference-face.referenceobject */,
+			);
+			path = "Reference Objects";
+			sourceTree = "<group>";
+		};
 		4959A6A82C9614C200A6C1A4 = {
 			isa = PBXGroup;
 			children = (
+				17398F732C972C6100279E24 /* Reference Objects */,
 				4959A6B32C9614C200A6C1A4 /* VIrtual Note */,
 				4959A6B42C9614C200A6C1A4 /* Packages */,
 				4959A6D32C9614C900A6C1A4 /* VIrtual NoteTests */,
@@ -212,6 +223,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17398F792C973CF000279E24 /* OrangeJuiceReference-face.referenceobject in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
