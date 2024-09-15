@@ -11,6 +11,7 @@ import SwiftUI
 struct VIrtual_NoteApp: App {
 
     @State private var appModel = AppModel()
+    @State private var avPlayerViewModel = AVPlayerViewModel()
 
     var body: some Scene {
         WindowGroup {
@@ -20,6 +21,13 @@ struct VIrtual_NoteApp: App {
 
         WindowGroup(id: "text-editor") {
             TextEditingView()
+        }
+
+        WindowGroup("tutorial", id: "tutorial") {
+            AVPlayerView(viewModel: avPlayerViewModel)
+                .onAppear() {
+                    avPlayerViewModel.play(.step1)
+                }
         }
 
         ImmersiveSpace(id: appModel.immersiveSpaceID) {

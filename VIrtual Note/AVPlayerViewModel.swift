@@ -10,14 +10,16 @@ import AVKit
 @MainActor
 @Observable
 class AVPlayerViewModel: NSObject {
+
+    enum Video: String {
+        case step1 = "step1"
+        case step2 = "step2"
+        case step3 = "step3"
+    }
+
     var isPlaying: Bool = false
     private var avPlayerViewController: AVPlayerViewController?
     private var avPlayer = AVPlayer()
-    private let videoURL: URL? = {
-        // Return URL for the video to play. For example:
-        // Bundle.main.url(forResource: "MyVideo", withExtension: "mp4")
-        return nil
-    }()
 
     func makePlayerViewController() -> AVPlayerViewController {
         let avPlayerViewController = AVPlayerViewController()
@@ -27,9 +29,8 @@ class AVPlayerViewModel: NSObject {
         return avPlayerViewController
     }
 
-    func play() {
-        guard !isPlaying, let videoURL else { return }
-        isPlaying = true
+    func play(_ video: Video) {
+        guard let videoURL = URL(string:"http://pierre.rougeot.free.fr/VisionNote/\(video.rawValue).mov") else { return }
 
         let item = AVPlayerItem(url: videoURL)
         avPlayer.replaceCurrentItem(with: item)
