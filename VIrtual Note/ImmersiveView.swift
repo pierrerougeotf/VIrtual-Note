@@ -35,15 +35,22 @@ struct ImmersiveView: View {
                         )
                     )
                 )
-                attachment.position = [0.0, 0.0, -0.2]
+                attachment.position = [0.0, 0.0, -0.5]
                 entity?.addChild(attachment)
             }
         } attachments: {
             Attachment(id: "barcode") {
-                Text("Glass Cube")
-                    .font(.extraLargeTitle)
+                MainContentView()
                     .padding()
                     .glassBackgroundEffect()
+                    .frame(width: 450, height: 1000)
+//                button("Open") {
+//                    
+//                }
+//                Text("Glass Cube")
+//                    .font(.extraLargeTitle)
+//                    .padding()
+//                    .glassBackgroundEffect()
             }
 
         }
